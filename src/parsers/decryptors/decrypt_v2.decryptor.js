@@ -1,4 +1,3 @@
-import CryptoJS from "crypto-js";
 import { fetchData } from "../../helper/fetchData.helper.js";
 import { v2_base_url } from '../../utils/base_v2.js';
 import { PLAYER_SCRIPT_URL } from "../../configs/player_v2.config.js";
@@ -17,7 +16,7 @@ async function decryptSources_v2(id, name, type) {
     const [_, sourceId] = /\/([^\/\?]+)\?/.exec(ajaxResp) || [];
     const source = await fetchData(`${hostname}/ajax/embed-6-v2/getSources?id=${sourceId}`);
 
-    const sourcesArray = source.sources.split("");
+    const sourcesArray = source.sources[0].file.split("");
     let extractedKey = "";
     let currentIndex = 0;
 
@@ -31,12 +30,10 @@ async function decryptSources_v2(id, name, type) {
       }
       currentIndex += index[1];
     }
-
-    const decrypted = CryptoJS.AES.decrypt(sourcesArray.join(""), extractedKey).toString(CryptoJS.enc.Utf8);
-    const decryptedSources = JSON.parse(decrypted);
+   
 
     return {
-      link: decryptedSources[0].file,
+      link: source.sources[0].file,
       server: name,
       type: type,
     };

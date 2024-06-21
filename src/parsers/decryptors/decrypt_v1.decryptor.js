@@ -1,4 +1,3 @@
-import CryptoJS from "crypto-js";
 import { v1_base_url } from "../../utils/base_v1.js";
 import { fetchData } from "../../helper/fetchData.helper.js";
 import fetchScript from "../../helper/fetchScript.helper.js";
@@ -18,7 +17,7 @@ export async function decryptSources_v1(id, name, type) {
     const [_, sourceId] = /\/([^\/\?]+)\?/.exec(ajaxResp) || [];
     const source = await fetchData(`${hostname}/embed-2/ajax/e-1/getSources?id=${sourceId}`);
 
-    const sourcesArray = source.sources.split("");
+    const sourcesArray = source.sources[0].file.split("");
     let extractedKey = "";
     let currentIndex = 0;
 
@@ -33,11 +32,8 @@ export async function decryptSources_v1(id, name, type) {
       currentIndex += index[1];
     }
 
-    const decrypted = CryptoJS.AES.decrypt(sourcesArray.join(""), extractedKey).toString(CryptoJS.enc.Utf8);
-    const decryptedSources = JSON.parse(decrypted);
-
     return {
-      link: decryptedSources[0].file,
+      link: source.sources[0].file,
       server: name,
       type: type,
     };
