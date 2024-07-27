@@ -10,6 +10,8 @@ import * as topTenController from "../src/controllers/topten.controller.js";
 import * as animeInfoController from "../src/controllers/animeInfo.controller.js";
 import * as streamController from "../src/controllers/streamInfo.controller.js";
 import * as searchController from "../src/controllers/search.controller.js";
+import * as azController from "../src/controllers/azlist.controller.js";
+import { routeaz } from "../src/routes/az.route.js";
 
 const app = express();
 const port = process.env.PORT || 4444;
@@ -32,6 +34,10 @@ routeTypes.forEach((routeType) => {
 
 app.get("/api/top-ten", async (req, res) => {
   await topTenController.getTopTen(req, res);
+});
+
+app.get("/api/az-list", async (req, res) => {
+  await azController.getAZList(req, res, routeaz);
 });
 
 app.get("/api/info", async (req, res) => {

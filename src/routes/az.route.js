@@ -1,0 +1,1 @@
+export const routeaz = 'az-list'
