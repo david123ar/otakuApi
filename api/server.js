@@ -12,6 +12,8 @@ import * as streamController from "../src/controllers/streamInfo.controller.js";
 import * as searchController from "../src/controllers/search.controller.js";
 import * as azController from "../src/controllers/azlist.controller.js";
 import { routeaz } from "../src/routes/az.route.js";
+import { routeTypo } from "../src/routes/azmore.route.js";
+import * as azmoreController from "../src/controllers/azmore.controller.js";
 
 const app = express();
 const port = process.env.PORT || 4444;
@@ -29,6 +31,12 @@ app.get("/api/", async (req, res) => {
 routeTypes.forEach((routeType) => {
   app.get(`/api/${routeType}`, async (req, res) => {
     await categoryController.getCategory(req, res, routeType);
+  });
+});
+
+routeTypo.forEach((routeType) => {
+  app.get(`/api/${routeType}`, async (req, res) => {
+    await azmoreController.getAZMore(req, res, routeType);
   });
 });
 
