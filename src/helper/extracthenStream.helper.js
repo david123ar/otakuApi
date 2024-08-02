@@ -1,11 +1,23 @@
 import puppeteer from 'puppeteer';
 
 async function extractPage(impo) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
+  });
   const page = await browser.newPage();
 
   try {
-    await page.goto(`https://hentai.tv/hentai/${impo}`, { waitUntil: 'networkidle2' });
+    await page.setRequestInterception(true);
+    page.on('request', request => {
+      if (['image', 'stylesheet', 'font'].includes(request.resourceType())) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
+    await page.goto(`https://hentai.tv/hentai/${impo}`, { waitUntil: 'networkidle2', timeout: 120000 });
 
     // Check if the ad is present and click the close button
     const adSelector = '#aawp .flex-1 .container button';
@@ -18,7 +30,10 @@ async function extractPage(impo) {
       await page.waitForNavigation({ waitUntil: 'networkidle2' });
     }
 
-    // Proceed with extracting the data
+    // Wait for the necessary content to load
+    await page.waitForSelector('#aawp .flex-1 .container', { timeout: 30000 });
+
+    // Extract the data
     const data = await page.evaluate(() => {
       const url = document.querySelector('#aawp iframe')?.src || '';
       const title = document.querySelector('#aawp .flex-1 .container .border-b h1')?.innerText.trim() || '';
@@ -26,7 +41,7 @@ async function extractPage(impo) {
       const poster = document.querySelector('#aawp .flex-1 .container .flex aside:first-child img')?.src || '';
 
       const cenco = document.querySelector('#aawp .flex-1 .container .flex aside:last-child p:first-child a')?.innerText.trim() || '';
-      const cencored = cenco === 'CENSORED' ? cenco : ''
+      const cencored = cenco === 'CENSORED' ? cenco : '';
       
       const info = {
         brand: document.querySelector(`#aawp .flex-1 .container .flex aside:last-child p:nth-child(${cenco === 'CENSORED' ? '2' : '1' }) a`)?.innerText.trim() || '',
