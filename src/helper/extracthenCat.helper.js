@@ -36,5 +36,4 @@ async function extractPage(page, impo, item) {
     throw error;
   }
 }
-
 export default extractPage;

@@ -12,7 +12,7 @@ async function extractPage() {
 
     const category = $("#aawp .flex-1 .grid .btn")
       .map((index, element) => {
-        const imgStyle = $("span",element).attr("style");
+        const imgStyle = $("span", element).attr("style");
 
         const urlRegex = /url\('(.+?)'\)/;
         const match = imgStyle.match(urlRegex);
@@ -45,24 +45,34 @@ async function extractPage() {
             `No style attribute found for element at index ${index}`
           );
         }
-        const firstPoster = $(".p-1 .p-6 .relative img").attr("src");
+        const firstPoster = $(`.p-1 .p-6 img`, element).attr("src");
         const title = $(".p-1 .p-6 .relative .text-lg", element).text().trim();
+        const titleOp = $(".p-1 .relative .p-6 p:last-child", element)
+          .text()
+          .trim();
         const description = $(".p-1 .p-6 .relative .text-sm", element)
           .text()
           .trim();
+        const partOne = $(".p-1 .flex-1 .text-sm a", element).text().trim();
+        const partTwo = $(".p-1 .flex-1 .text-sm", element).text().trim();
+        const descriptionTwo = partOne + partTwo;
         const href = $(".p-1 .p-6", element).attr("href");
         const id = href ? href.replace("https://hentai.tv/", "/") : null;
         const videos = $(".p-1 .p-6 .relative .flex span", element)
           .text()
           .trim();
+        const videosOpt = $(".p-1 .flex-1 .flex span", element).text().trim();
 
         return {
           id,
           poster,
           title,
+          titleOp,
           firstPoster,
           description,
+          descriptionTwo,
           videos,
+          videosOpt,
         };
       })
       .get(); // .get() converts Cheerio object to an array
