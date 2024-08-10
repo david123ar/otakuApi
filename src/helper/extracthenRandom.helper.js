@@ -10,7 +10,7 @@ async function extractPage() {
     const resp = await axiosInstance.get(`${baseUrl}/random/`);
     const $ = cheerio.load(resp.data);
 
-    const data = $("#aawp .flex-1 section [data-results] .flex")
+    const bata = $("#aawp .flex-1 section [data-results] .flex")
       .map((index, element) => {
         const poster = $(element).find(".bg-black img").attr("src") || "";
         const title = $(element).find(".p-3 a").text().trim() || "";
@@ -33,15 +33,11 @@ async function extractPage() {
       .get(); // .get() converts Cheerio object to an array
 
     // Filter out duplicate entries based on 'id'
-    const uniqueData = Array.from(new Set(data.map(item => item.id)))
-      .map(id => data.find(item => item.id === id));
+    const data = Array.from(new Set(bata.map((item) => item.id))).map((id) =>
+      bata.find((item) => item.id === id)
+    );
 
-    return {
-      success: true,
-      results: {
-        data: uniqueData
-      }
-    };
+    return data;
   } catch (error) {
     console.error(`Error extracting data from page:`, error.message);
     throw error;
