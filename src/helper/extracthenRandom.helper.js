@@ -12,7 +12,8 @@ async function extractPage() {
 
     const bata = $("#aawp .flex-1 section [data-results] .flex")
       .map((index, element) => {
-        const poster = $(element).find(".bg-black img").attr("src") || "";
+        const banner = $(element).find(".bg-black img").attr("src") || "";
+        const poster = $(element).find(".absolute img").attr("src") || "";
         const title = $(element).find(".p-3 a").text().trim() || "";
         const href = $(element).find(".p-3 a").attr("href") || "";
         const id = href ? href.replace("https://hentai.tv/hentai/", "/") : null;
@@ -23,6 +24,7 @@ async function extractPage() {
         if (id && poster && title && date && views) {
           return {
             id,
+            banner,
             poster,
             title,
             date,
