@@ -51,6 +51,7 @@ async function extractPage(pageId) {
     const data = {
       id: mediaData.id,
       title: title,
+      titleDub: mediaData.title.english,
       slug: slug,  // Add slug to the data object
       description: mediaData.description,
       bannerImage: mediaData.bannerImage,
