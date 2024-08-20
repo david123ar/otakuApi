@@ -165,10 +165,7 @@ async function extractPage(pageId) {
       releaseYearMatch: Boolean(matchingResult)
     };
 
-    return {
-      success: true,
-      results: { data }
-    };
+    return data
   } catch (error) {
     console.error(`Error extracting data for page ID ${pageId}:`, error.message);
     return {
