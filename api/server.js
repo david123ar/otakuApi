@@ -22,6 +22,7 @@ import *  as henRandomController from "../src/controllers/henRandom.controller.j
 import *  as henCatController from "../src/controllers/hencat.controller.js";
 import *  as henStreamController from "../src/controllers/henStream.js";
 import *  as AnilistController from "../src/controllers/anilist.controller.js";
+import *  as nextController from "../src/controllers/nextStream.controller.js";
 
 const app = express();
 const port = process.env.PORT || 4444;
@@ -82,6 +83,10 @@ app.get("/api/hen-random", async (req, res) => {
 
 app.get("/api/hen-stream", async (req, res) => {
   await henStreamController.gethenStream(req, res);
+});
+
+app.get("/api/next-stream", async (req, res) => {
+  await nextController.getnextStream(req, res);
 });
 
 app.get("/api/az-list", async (req, res) => {

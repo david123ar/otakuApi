@@ -10,7 +10,7 @@ export async function fetchServerData_v2(id) {
     const serverData = $("div.ps_-block > div.ps__-list > div.server-item")
       .filter((_, ele) => {
         const name = $(ele).find("a.btn").text().trim();
-        return name === "Vidcloud";
+        return name === "Vidstreaming";
       })
       .map((_, ele) => ({
         name: $(ele).find("a.btn").text().trim(),

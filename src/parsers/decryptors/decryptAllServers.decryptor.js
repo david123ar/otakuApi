@@ -7,10 +7,18 @@ export async function decryptAllServers(data) {
     const subtitlePromise = extractSubtitle(server.id);
 
     let decryptionPromise;
-    if (server.type === "sub") {
-      decryptionPromise = decryptSources_v1(server.id, server.name, server.type);
+    if (server.type === "sub" || server.type === "raw") {
+      decryptionPromise = decryptSources_v1(
+        server.id,
+        server.name,
+        server.type
+      );
     } else if (server.type === "dub") {
-      decryptionPromise = decryptSources_v2(server.id, server.name, server.type);
+      decryptionPromise = decryptSources_v2(
+        server.id,
+        server.name,
+        server.type
+      );
     }
 
     const [subtitleResult, decryptionResult] = await Promise.all([
