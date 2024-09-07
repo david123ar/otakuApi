@@ -12,8 +12,6 @@ async function extractPage(params) {
 
     const scheduleDateValue = $("#schedule-date").attr("data-value");
 
-    // Log the extracted value
-    console.log(scheduleDateValue);
 
     const data = scheduleDateValue;
 

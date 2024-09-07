@@ -1,4 +1,4 @@
-import { v1_base_url } from "../../utils/base_v1.js";
+import { v2_base_url } from "../../utils/base_v2.js";
 import { fetchData } from "../../helper/fetchData.helper.js";
 import fetchScript from "../../helper/fetchScript.helper.js";
 import getKeys from "../../helper/getKey.helper.js";
@@ -7,21 +7,21 @@ import { PLAYER_SCRIPT_URL } from "../../configs/player_v1.config.js";
 
 export async function decryptSources_v1(id, name, type) {
   try {
-    const [sourcesData, decryptKey_v1] = await Promise.all([
-      fetchData(`https://${v1_base_url}/ajax/v2/episode/sources?id=${id}`),
+    const [sourcesData, decryptKey_v2] = await Promise.all([
+      fetchData(`https://${v2_base_url}/ajax/episode/sources?id=${id}`),
       getKeys(await fetchScript(PLAYER_SCRIPT_URL)),
     ]);
 
     const ajaxResp = sourcesData.link;
     const [hostname] = /^(https?:\/\/(?:www\.)?[^\/\?]+)/.exec(ajaxResp) || [];
     const [_, sourceId] = /\/([^\/\?]+)\?/.exec(ajaxResp) || [];
-    const source = await fetchData(`${hostname}/embed-2/ajax/e-1/getSources?id=${sourceId}`);
+    const source = await fetchData(`${hostname}/ajax/embed-6-v2/getSources?id=${sourceId}`);
 
     const sourcesArray = source.sources[0].file.split("");
     let extractedKey = "";
     let currentIndex = 0;
 
-    for (const index of decryptKey_v1) {
+    for (const index of decryptKey_v2) {
       const start = index[0] + currentIndex;
       const end = start + index[1];
 
@@ -31,6 +31,7 @@ export async function decryptSources_v1(id, name, type) {
       }
       currentIndex += index[1];
     }
+   
 
     return {
       link: source.sources[0].file,
