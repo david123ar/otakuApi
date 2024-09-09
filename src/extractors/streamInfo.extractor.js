@@ -8,7 +8,7 @@ import { decryptAllServers } from "../parsers/decryptors/decryptAllServers.decry
 async function extractOtherEpisodes(id) {
   try {
     const finalId = id.split("?").shift().split("-").pop();
-    const resp = await axios.get(`${baseUrl}/ajax/v2/episode/list/${finalId}`);
+    const resp = await axios.get(`${baseUrl}/ajax/episode/list/${finalId}`);
     const $ = cheerio.load(resp.data.html);
     const elements = $(
       ".seasons-block > #detail-ss-list > .detail-infor-content > .ss-list > a"

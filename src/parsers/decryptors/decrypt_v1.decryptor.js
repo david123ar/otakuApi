@@ -11,6 +11,7 @@ export async function decryptSources_v1(id, name, type) {
       fetchData(`https://${v2_base_url}/ajax/episode/sources?id=${id}`),
       getKeys(await fetchScript(PLAYER_SCRIPT_URL)),
     ]);
+    console.log(id)
 
     const ajaxResp = sourcesData.link;
     const [hostname] = /^(https?:\/\/(?:www\.)?[^\/\?]+)/.exec(ajaxResp) || [];
