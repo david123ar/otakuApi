@@ -1,8 +1,9 @@
+import CryptoJS from "crypto-js";
+import { v2_base_url } from "../../utils/base_v2.js";
 import { fetchData } from "../../helper/fetchData.helper.js";
-import { v2_base_url } from '../../utils/base_v2.js';
-import { PLAYER_SCRIPT_URL } from "../../configs/player_v2.config.js";
 import fetchScript from "../../helper/fetchScript.helper.js";
 import getKeys from "../../helper/getKey.helper.js";
+import { PLAYER_SCRIPT_URL } from "../../configs/player_v2.config.js";
 
 async function decryptSources_v2(id, name, type) {
   try {
@@ -11,12 +12,19 @@ async function decryptSources_v2(id, name, type) {
       getKeys(await fetchScript(PLAYER_SCRIPT_URL)),
     ]);
 
+    // const sourcesData = await fetchData(
+    //   `https://${v2_base_url}/ajax/episode/sources?id=${id}`
+    // );
     const ajaxResp = sourcesData.link;
     const [hostname] = /^(https?:\/\/(?:www\.)?[^\/\?]+)/.exec(ajaxResp) || [];
     const [_, sourceId] = /\/([^\/\?]+)\?/.exec(ajaxResp) || [];
-    const source = await fetchData(`${hostname}/ajax/embed-6-v2/getSources?id=${sourceId}`);
+    const source = await fetchData(
+      `${hostname}/ajax/embed-6-v2/getSources?id=${sourceId}`
+    );
 
-    const sourcesArray = source.sources[0].file.split("");
+    // The server doesn't encrypt the source anymore
+
+    const sourcesArray = source.sources.split("");
     let extractedKey = "";
     let currentIndex = 0;
 
@@ -30,12 +38,21 @@ async function decryptSources_v2(id, name, type) {
       }
       currentIndex += index[1];
     }
-   
 
+    const decrypted = CryptoJS.AES.decrypt(sourcesArray.join(""), extractedKey).toString(CryptoJS.enc.Utf8);
+    const decryptedSources = JSON.parse(decrypted);
+    source.sources = null;
+    source.sources = [{
+      file: decryptedSources[0].file,
+      type: "hls",
+    }];
+    if (source.hasOwnProperty('server')) {
+      delete source.server;
+    }
     return {
-      link: source.sources[0].file,
-      server: name,
       type: type,
+      source,
+      server: name,
     };
   } catch (error) {
     console.error("Error during decryption:", error);

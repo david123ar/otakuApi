@@ -10,7 +10,7 @@ export async function extractSubtitle(id) {
   const source = await axios.get(
     `${provider}/ajax/embed-6-v2/getSources?id=${resp.data.link
       .split("/")
-      .pop().replace(/\?z=\d?/g, "")}`
+      .pop().replace(/.*\/([^\/?]+)(\?.*)?$/, "$1")}`
   );
   const subtitles = source.data.tracks;
   const intro = source.data.intro;
