@@ -36,7 +36,11 @@ async function extractOtherEpisodes(id) {
       .get();
 
     // Extract the next episode information (if available)
-    const nextEpisode = $(".main-wrapper > .schedule-alert > .alert > span:last-child").text().trim();
+    const nextEpisode = $(
+      ".main-wrapper > .schedule-alert > .alert > span:last-child"
+    )
+      .text()
+      .trim();
 
     const episodes = {
       nextEpisode,
@@ -70,10 +74,16 @@ async function extractStreamingInfo(id) {
     // Modify the decrypted results to rename the second occurrence of "Vidstreaming" to "Vidcloud"
     let vidstreamingCount = 0;
     decryptedResults.forEach((result) => {
-      if (result.value.decryptionResult.server === "Vidstreaming") {
+      if (result.value.decryptionResult.server === "HD-1") {
         vidstreamingCount++;
+        if (vidstreamingCount === 1) {
+          result.value.decryptionResult.server = "Vidstreaming"; // Rename the second occurrence
+        }
         if (vidstreamingCount === 2) {
           result.value.decryptionResult.server = "Vidcloud"; // Rename the second occurrence
+        }
+        if (vidstreamingCount === 3) {
+          result.value.decryptionResult.server = "Vidstreaming"; // Rename the second occurrence
         }
         if (vidstreamingCount === 4) {
           result.value.decryptionResult.server = "Vidcloud"; // Rename the second occurrence
