@@ -1,2 +1,2 @@
-const baseUrl='https://kaido.to'
+const baseUrl='https://hianime.to'
 export default baseUrl
