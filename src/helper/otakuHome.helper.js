@@ -30,8 +30,18 @@ async function extractPage() {
       spotlightRank = spotlightRank.split("\t")[0]; // Get the actual rank
 
       // Clean and format URLs
-      let watchUrl = $(element).find('a[href*="/watch/"]').attr("href");
-      let detailsUrl = $(element).find('a[href*="/anime/"]').attr("href");
+      let watchUrl =
+        $(element)
+          .find('a[href*="/watch/"]')
+          .attr("href")
+          ?.split("/watch/")[1]?.replace('/','') || "";
+
+      let detailsUrl =
+        $(element)
+          .find('a[href*="/anime/"]')
+          .attr("href")
+          ?.split("/anime/")[1]?.replace('/','') || "";
+
       watchUrl = watchUrl ? watchUrl : "N/A";
       detailsUrl = detailsUrl ? detailsUrl : "N/A";
 
@@ -59,7 +69,7 @@ async function extractPage() {
       date = date.replace(/event\s+/g, "").trim();
 
       const audioQuality = $(element).find(".quality").text().trim();
-      const description = $(element).find(".text-[13px]").text().trim();
+      const description = $(element).find(".mbe-4.line-clamp-2").text().trim();
 
       if (englishTitle && poster) {
         spotlightList.push({
@@ -223,9 +233,9 @@ async function extractPage() {
     const genres = new Set();
 
     // Select all genre list links using a more precise selector
-    $('li.genre-list a').each((_, element) => {
+    $("li.genre-list a").each((_, element) => {
       const genreName = $(element).text().trim();
-      const genreLink = $(element).attr('href');
+      const genreLink = $(element).attr("href");
 
       // Add unique genres to the set
       if (genreName && genreLink) {
