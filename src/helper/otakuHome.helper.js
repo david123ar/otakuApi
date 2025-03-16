@@ -180,7 +180,12 @@ async function extractPage() {
         $(element).find("h3 a span[data-en-title]").text().trim() || "";
       const japaneseTitle =
         $(element).find("h3 a span[data-nt-title]").text().trim() || "";
-      const animeUrl = $(element).find(".kira-anime a").attr("href") || "";
+      const animeUrl =
+        $(element)
+          .find(".kira-anime a")
+          .attr("href")
+          ?.split("/anime/")[1]
+          ?.replace("/", "") || "";
       const imageUrl =
         $(element).find(".kira-anime img").attr("data-src") || "";
       const dubStatus =
@@ -218,7 +223,12 @@ async function extractPage() {
         $(element).find("h3 a span[data-en-title]").text().trim() || "";
       const japaneseTitle =
         $(element).find("h3 a span[data-nt-title]").text().trim() || "";
-      const animeUrl = $(element).find(".kira-anime a").attr("href") || "";
+      const animeUrl =
+        $(element)
+          .find(".kira-anime a")
+          .attr("href")
+          ?.split("/anime/")[1]
+          ?.replace("/", "") || "";
       const imageUrl =
         $(element).find(".kira-anime img").attr("data-src") || "";
       const dubStatus =
