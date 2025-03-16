@@ -34,13 +34,15 @@ async function extractPage() {
         $(element)
           .find('a[href*="/watch/"]')
           .attr("href")
-          ?.split("/watch/")[1]?.replace('/','') || "";
+          ?.split("/watch/")[1]
+          ?.replace("/", "") || "";
 
       let detailsUrl =
         $(element)
           .find('a[href*="/anime/"]')
           .attr("href")
-          ?.split("/anime/")[1]?.replace('/','') || "";
+          ?.split("/anime/")[1]
+          ?.replace("/", "") || "";
 
       watchUrl = watchUrl ? watchUrl : "N/A";
       detailsUrl = detailsUrl ? detailsUrl : "N/A";
@@ -88,7 +90,7 @@ async function extractPage() {
     });
 
     const trendingList = [];
-    $(".swiper-slide").each((i, element) => {
+    $(".swiper-trending .swiper-slide").each((i, element) => {
       const englishTitle = $(element).find("span[data-en-title]").text().trim();
 
       const japaneseTitle = $(element)
@@ -99,10 +101,15 @@ async function extractPage() {
 
       const spotlightRank = $(element).find(".text-xs").text().trim();
 
-      const watchUrl = $(element).find("a").attr("href") || "N/A";
+      const watchUrl =
+        $(element)
+          .find("a")
+          .attr("href")
+          ?.split("/anime/")[1]
+          ?.replace("/", "") || "";
 
-      const audioQuality = $(element).find(".quality").text().trim();
-      const description = $(element).find(".text-[13px]").text().trim();
+      // const audioQuality = $(element).find(".quality").text().trim();
+      // const description = $(element).find(".text-[13px]").text().trim();
 
       if (englishTitle && poster) {
         trendingList.push({
@@ -110,8 +117,8 @@ async function extractPage() {
           japaneseTitle,
           poster,
           watchUrl,
-          audioQuality,
-          description,
+          // audioQuality,
+          // description,
         });
       }
     });
