@@ -139,6 +139,10 @@ async function extractPage() {
             .attr("href")
             ?.split("/anime/")[1]
             ?.replace("/", "") || "";
+        const type = $(element)
+          .find(".whitespace-nowrap.uppercase")
+          .text()
+          .trim();
         const episodeCount = $(element)
           .find("span:contains('E')")
           .text()
@@ -154,6 +158,7 @@ async function extractPage() {
           japaneseTitle,
           imageUrl,
           link,
+          type,
           episodeCount,
           duration,
           views,
