@@ -133,7 +133,12 @@ async function extractPage() {
           .text()
           .trim();
         const imageUrl = $(element).find("a img").attr("data-src");
-        const link = $(element).find("a").attr("href");
+        const link =
+          $(element)
+            .find("a")
+            .attr("href")
+            ?.split("/anime/")[1]
+            ?.replace("/", "") || "";
         const episodeCount = $(element)
           .find("span:contains('E')")
           .text()
