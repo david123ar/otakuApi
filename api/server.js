@@ -12,6 +12,7 @@ import * as otakuInfoController from "../src/controllers/otakuInfo.controller.js
 import * as otakuStreamController from "../src/controllers/otakuStream.controller.js";
 import * as otakuCategController from "../src/controllers/otakuCateg.controller.js";
 import * as otakuSearchController from "../src/controllers/otakuSearch.controller.js";
+import * as otakuAZController from "../src/controllers/otakuAZ.controller.js";
 import * as animeInfoController from "../src/controllers/animeInfo.controller.js";
 import * as streamController from "../src/controllers/streamInfo.controller.js";
 import * as searchController from "../src/controllers/search.controller.js";
@@ -76,6 +77,10 @@ app.get("/api/otaku-categ", async (req, res) => {
 
 app.get("/api/otaku-search", async (req, res) => {
   await otakuSearchController.getOtakuSearch(req, res);
+});
+
+app.get("/api/otaku-az", async (req, res) => {
+  await otakuAZController.getOtakuAZ(req, res);
 });
 
 app.get("/api/hen-home", async (req, res) => {

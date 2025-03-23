@@ -139,6 +139,16 @@ async function extractPage() {
             .attr("href")
             ?.split("/anime/")[1]
             ?.replace("/", "") || "";
+        let linki = "";
+        let qtip = "";
+
+        // Find the anchor tag with the data-tippy-content-to attribute within the current element
+        const anchor = $(element).find("div[data-tippy-featured-id]");
+
+        if (anchor.length > 0) {
+          qtip = anchor.attr("data-tippy-featured-id").trim();
+          linki = anchor.attr("aria-label");
+        }
         const type = $(element)
           .find(".whitespace-nowrap.uppercase")
           .text()
@@ -162,6 +172,8 @@ async function extractPage() {
           episodeCount,
           duration,
           views,
+          linki,
+          qtip,
         });
       });
       return list;
@@ -186,6 +198,16 @@ async function extractPage() {
           .attr("href")
           ?.split("/anime/")[1]
           ?.replace("/", "") || "";
+      let link = "";
+      let qtip = "";
+
+      // Find the anchor tag with the data-tippy-content-to attribute within the current element
+      const anchor = $(element).find(".kira-anime a[data-tippy-content-to]");
+
+      if (anchor.length > 0) {
+        qtip = anchor.attr("data-tippy-content-to").trim();
+        link = anchor.attr("href");
+      }
       const imageUrl =
         $(element).find(".kira-anime img").attr("data-src") || "";
       const dubStatus =
@@ -211,6 +233,8 @@ async function extractPage() {
         dubStatus,
         type,
         duration,
+        qtip,
+        link,
       });
     });
 
@@ -229,6 +253,16 @@ async function extractPage() {
           .attr("href")
           ?.split("/anime/")[1]
           ?.replace("/", "") || "";
+      let link = "";
+      let qtip = "";
+
+      // Find the anchor tag with the data-tippy-content-to attribute within the current element
+      const anchor = $(element).find(".kira-anime a[data-tippy-content-to]");
+
+      if (anchor.length > 0) {
+        qtip = anchor.attr("data-tippy-content-to").trim();
+        link = anchor.attr("href");
+      }
       const imageUrl =
         $(element).find(".kira-anime img").attr("data-src") || "";
       const dubStatus =
@@ -254,6 +288,8 @@ async function extractPage() {
         dubStatus,
         type,
         duration,
+        qtip,
+        link,
       });
     });
 

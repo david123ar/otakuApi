@@ -62,22 +62,44 @@ async function extractPage(id) {
 
     // Extract "Report Problem" link (optional)
 
-    const emoji = $('.bottom-side .text-base').text().trim();
+    const emoji = $(".bottom-side .text-base").text().trim();
 
     // Extract the text about the next episode
-    const episodeText = $('.bottom-side span').eq(1).text().trim();
+    const episodeText = $(".bottom-side span").eq(1).text().trim();
 
     // Extract the scheduled time (including timezone and countdown)
-    const scheduledTime = $('.bottom-side span[data-countdown]').attr('data-countdown');
-    const timezone = $('.bottom-side span[data-timezone]').attr('data-timezone');
+    const scheduledTime = $(".bottom-side span[data-countdown]").attr(
+      "data-countdown"
+    );
+    const timezone = $(".bottom-side span[data-timezone]").attr(
+      "data-timezone"
+    );
 
     // Return the extracted details in an object
     const nextEpisodeDetails = {
       emoji,
       episodeText,
       scheduledTime,
-      timezone
+      timezone,
     };
+
+    let postDataId;
+
+    // Find the script tag containing the variable
+    const scriptContent = $("script")
+      .toArray()
+      .find((el) => {
+        const content = $(el).html();
+        return content && content.includes("current_post_data_id");
+      });
+
+    if (scriptContent) {
+      const scriptText = $(scriptContent).html();
+      const match = scriptText.match(/var\s+current_post_data_id\s*=\s*(\d+);/);
+      if (match) {
+        postDataId = parseInt(match[1], 10);
+      }
+    }
 
     // Return the extracted details in an object
     const episodeDetails = {
@@ -94,7 +116,7 @@ async function extractPage(id) {
       navigation: {
         nextEpisodeLink,
       },
-      nextEpisodeDetails
+      nextEpisodeDetails,
     };
 
     // Extract anime image source (thumbnail)
@@ -137,10 +159,44 @@ async function extractPage(id) {
       },
     };
 
+    const mostPopular = [];
+    $("li.flex.gap-5.border-b").each((index, element) => {
+      // Extract data for each anime
+      const title = $(element).find("h3 a span[data-en-title]").text().trim();
+      const japaneseTitle = $(element)
+        .find("h3 a span[data-nt-title]")
+        .text()
+        .trim();
+      const link = $(element).find("h3 a").attr("href");
+      const imageUrl = $(element).find("img").attr("data-src");
+      const type = $(element).find(".text-spec span:first-child").text().trim();
+      const episode = $(element)
+        .find(".text-spec span:nth-child(3)")
+        .text()
+        .trim();
+      const duration = $(element)
+        .find(".text-spec span:last-child")
+        .text()
+        .trim();
+
+      // Store the extracted data in an array
+      mostPopular.push({
+        title,
+        japaneseTitle,
+        link,
+        imageUrl,
+        type,
+        episode,
+        duration,
+      });
+    });
+
     const data = {
+      postDataId,
       episodes,
       episodeDetails,
       animeDetails,
+      mostPopular,
     };
 
     return data;

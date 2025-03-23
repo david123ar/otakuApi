@@ -137,6 +137,26 @@ async function extractPage(id) {
       });
     });
 
+    let postDataId;
+
+    const scriptContent = $("script")
+      .toArray()
+      .find((el) => {
+        const content = $(el).html();
+        return content && content.includes("current_post_data_id");
+      });
+
+    if (scriptContent) {
+      const scriptText = $(scriptContent).html();
+      const match = scriptText.match(
+        /const\s+current_post_data_id\s*=\s*(\d+);/
+      );
+      if (match) {
+        postDataId = match[1];
+        console.log("current_post_data_id:", postDataId);
+      }
+    }
+
     const mostPopular = [];
     $("li.flex.gap-5.border-b").each((index, element) => {
       // Extract data for each anime
@@ -170,6 +190,7 @@ async function extractPage(id) {
     });
 
     const data = {
+      postDataId,
       anime,
       animeData,
       seasons,
