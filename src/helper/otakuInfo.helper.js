@@ -15,6 +15,8 @@ async function extractPage(id) {
     const anime = {
       englishTitle: $("h1 span[data-en-title]").text().trim(),
       japaneseTitle: $("h1 span[data-nt-title]").text().trim(),
+      poster: $(".anime-image img").attr("data-src").trim(),
+      bgImg: $(".background-image img").attr("data-src").trim(),
       type: "",
       episode: "",
       duration: "",
