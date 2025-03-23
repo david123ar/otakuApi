@@ -17,32 +17,16 @@ async function extractPage(id) {
       japaneseTitle: $("h1 span[data-nt-title]").text().trim(),
       poster: $(".anime-image img").attr("data-src").trim(),
       bgImg: $(".background-image img").attr("data-src").trim(),
-      type: "",
-      episode: "",
-      duration: "",
-      views: "",
-      rating: "",
-      audio: "",
+      animeMetadata: [],
       languages: [],
       synopsis: $("div[data-synopsis]").text().trim(),
     };
 
+    anime.animeMetadata = [];
+
     $(".anime-metadata li").each((_, el) => {
       const text = $(el).text().trim();
-
-      if (text.startsWith("R")) {
-        anime.rating = text;
-      } else if (text.includes("Audio")) {
-        anime.audio = text;
-      } else if (text.includes("E ")) {
-        anime.episode = text.replace("E ", "");
-      } else if (text.match(/\d+M$/)) {
-        anime.duration = text;
-      } else if (text.match(/\d+(?:\.\d+)?[KMB]/)) {
-        anime.views = text;
-      } else if ($(el).find("a").length > 0) {
-        anime.type = $(el).find("a").text().trim();
-      }
+      anime.animeMetadata.push(text);
     });
 
     // Extract genres
