@@ -66,13 +66,20 @@ async function extractPage(id) {
     });
 
     // Extract Studio
-    const studio = $('li:contains("Studio:") a').text().trim();
+    const studio = [];
+    $('li:contains("Studio:") span:nth-of-type(2) a').each((_, element) => {
+      studio.push($(element).text().trim());
+    });
 
     // Extract Producers
     const producers = [];
     $('li:contains("Producer:") a').each((_, el) => {
       producers.push($(el).text().trim());
     });
+
+    const status = $('li:contains("Status:") span:nth-of-type(2)')
+      .text()
+      .trim();
 
     // Combine the data
     const animeData = {
@@ -89,6 +96,7 @@ async function extractPage(id) {
       genres,
       studio,
       producers,
+      status,
     };
 
     const seasons = [];
